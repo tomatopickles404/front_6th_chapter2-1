@@ -1,26 +1,24 @@
 import { PRODUCT_DATA } from './constants/product-data.js';
-import {
-  PRODUCT_IDS,
-  SALE_EVENTS,
-  TIMERS,
-  PARSING,
-} from './constants/business-rules.js';
+import { SALE_EVENTS, TIMERS, PARSING } from './constants/business-rules.js';
 import {
   handleSelectOptionsUpdate,
   handleCartUpdate,
   updatePricesInCart,
-  handleStockInfoUpdate,
-  updateLoyaltyPointsDisplay,
-  getStockTotal,
 } from './modules/index.js';
+import {
+  createInitialCartState,
+  initializeCart,
+  getProductInventory,
+  getProduct,
+  hasProduct,
+  decreaseProductQuantity,
+  increaseProductQuantity,
+  setLastSelectedProduct,
+  updateProductSaleStatus,
+  getLastSelectedProduct,
+} from './state/cart.js';
 
-// 비즈니스 상태 (전역으로 유지)
-let productInventory;
-let cartTotalAmount = 0;
-let cartItemCount;
-let lastSelectedProduct;
-
-// DOM 참조들은 main() 함수 내부로 이동
+let cartState = createInitialCartState();
 
 function main() {
   const root = document.getElementById('app');
@@ -33,16 +31,14 @@ function main() {
   const manualOverlay = document.createElement('div');
   const manualColumn = document.createElement('div');
 
+  // DOM
   const productSelector = document.createElement('select');
   const addToCartButton = document.createElement('button');
   const cartDisplayArea = document.createElement('div');
   const stockStatusDisplay = document.createElement('div');
 
   // 상태 초기화
-  cartTotalAmount = 0;
-  cartItemCount = 0;
-  lastSelectedProduct = null;
-  productInventory = PRODUCT_DATA;
+  cartState = initializeCart(cartState, PRODUCT_DATA);
 
   header.className = 'mb-8';
   header.innerHTML = `
@@ -105,8 +101,6 @@ function main() {
       <span id="points-notice">Earn loyalty points with purchase.</span>
     </p>
   `;
-
-  const orderSummaryTotal = rightColumn.querySelector('#cart-total');
 
   manualToggle.onclick = () => {
     manualOverlay.classList.toggle('hidden');
@@ -201,27 +195,28 @@ function main() {
   root.appendChild(manualToggle);
   root.appendChild(manualOverlay);
 
-  let initialStockTotal = 0;
-  for (let i = 0; i < productInventory.length; i++) {
-    initialStockTotal += productInventory[i].q;
-  }
-
   handleSelectOptionsUpdate({
     sel: productSelector,
-    prodList: productInventory,
+    prodList: getProductInventory(cartState),
   });
-  handleCartUpdate({ cartDisp: cartDisplayArea, prodList: productInventory });
+  handleCartUpdate({
+    cartDisp: cartDisplayArea,
+    prodList: getProductInventory(cartState),
+  });
 
   const lightningDelay = Math.random() * TIMERS.lightningDelayMax;
   setTimeout(() => {
     setInterval(() => {
+      const productInventory = getProductInventory(cartState);
       const luckyIdx = Math.floor(Math.random() * productInventory.length);
       const luckyItem = productInventory[luckyIdx];
       if (luckyItem.q > 0 && !luckyItem.onSale) {
-        luckyItem.val = Math.round(
-          luckyItem.originalVal * SALE_EVENTS.lightning.priceMultiplier
-        );
-        luckyItem.onSale = true;
+        cartState = updateProductSaleStatus(cartState, luckyItem.id, {
+          val: Math.round(
+            luckyItem.originalVal * SALE_EVENTS.lightning.priceMultiplier
+          ),
+          onSale: true,
+        });
         alert(
           '⚡번개세일! ' +
             luckyItem.name +
@@ -231,7 +226,7 @@ function main() {
         );
         handleSelectOptionsUpdate({
           sel: productSelector,
-          prodList: productInventory,
+          prodList: getProductInventory(cartState),
         });
         updatePricesInCart({ cartDisp: cartDisplayArea, totalCount: 0 });
       }
@@ -240,11 +235,10 @@ function main() {
 
   setTimeout(() => {
     setInterval(() => {
-      if (cartDisplayArea.children.length === 0) {
-        // 빈 장바구니 처리 로직은 handleCartUpdate에서 처리됨
-      }
-      if (lastSelectedProduct) {
+      if (getLastSelectedProduct(cartState)) {
         let suggestedProduct = null;
+        const productInventory = getProductInventory(cartState);
+        const lastSelectedProduct = getLastSelectedProduct(cartState);
         for (let k = 0; k < productInventory.length; k++) {
           if (productInventory[k].id !== lastSelectedProduct) {
             if (productInventory[k].q > 0) {
@@ -261,13 +255,15 @@ function main() {
               suggestedProduct.name +
               '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!'
           );
-          suggestedProduct.val = Math.round(
-            suggestedProduct.val * SALE_EVENTS.suggestion.priceMultiplier
-          );
-          suggestedProduct.suggestSale = true;
+          cartState = updateProductSaleStatus(cartState, suggestedProduct.id, {
+            val: Math.round(
+              suggestedProduct.val * SALE_EVENTS.suggestion.priceMultiplier
+            ),
+            suggestSale: true,
+          });
           handleSelectOptionsUpdate({
             sel: productSelector,
-            prodList: productInventory,
+            prodList: getProductInventory(cartState),
           });
           updatePricesInCart({ cartDisp: cartDisplayArea, totalCount: 0 });
         }
@@ -278,23 +274,11 @@ function main() {
   // 이벤트 리스너들 (클로저로 지역변수 접근)
   addToCartButton.addEventListener('click', () => {
     const selectedItemId = productSelector.value;
-    let hasValidItem = false;
-    for (let idx = 0; idx < productInventory.length; idx++) {
-      if (productInventory[idx].id === selectedItemId) {
-        hasValidItem = true;
-        break;
-      }
-    }
+    const hasValidItem = hasProduct(cartState, selectedItemId);
     if (!selectedItemId || !hasValidItem) {
       return;
     }
-    let itemToAdd = null;
-    for (let j = 0; j < productInventory.length; j++) {
-      if (productInventory[j].id === selectedItemId) {
-        itemToAdd = productInventory[j];
-        break;
-      }
-    }
+    const itemToAdd = getProduct(cartState, selectedItemId);
     if (itemToAdd && itemToAdd.q > 0) {
       const existingCartItem = document.getElementById(itemToAdd['id']);
       if (existingCartItem) {
@@ -308,7 +292,7 @@ function main() {
             Number.parseInt(quantityElement.textContent, PARSING.radix)
         ) {
           quantityElement.textContent = newQuantity;
-          itemToAdd['q']--;
+          cartState = decreaseProductQuantity(cartState, itemToAdd.id, 1);
         } else {
           alert('재고가 부족합니다.');
         }
@@ -379,13 +363,13 @@ function main() {
           </div>
         `;
         cartDisplayArea.appendChild(newCartItem);
-        itemToAdd.q--;
+        cartState = decreaseProductQuantity(cartState, itemToAdd.id, 1);
       }
       handleCartUpdate({
         cartDisp: cartDisplayArea,
-        prodList: productInventory,
+        prodList: getProductInventory(cartState),
       });
-      lastSelectedProduct = selectedItemId;
+      cartState = setLastSelectedProduct(cartState, selectedItemId);
     }
   });
 
@@ -397,17 +381,8 @@ function main() {
     ) {
       const productId = targetElement.dataset.productId;
       const cartItemElement = document.getElementById(productId);
-      let correspondingProduct = null;
-      for (
-        let productIndex = 0;
-        productIndex < productInventory.length;
-        productIndex++
-      ) {
-        if (productInventory[productIndex].id === productId) {
-          correspondingProduct = productInventory[productIndex];
-          break;
-        }
-      }
+      const correspondingProduct = getProduct(cartState, productId);
+
       if (targetElement.classList.contains('quantity-change')) {
         const quantityChange = Number.parseInt(
           targetElement.dataset.change,
@@ -420,14 +395,23 @@ function main() {
           PARSING.radix
         );
         const newQuantity = currentQuantity + quantityChange;
+
         if (
           newQuantity > 0 &&
           newQuantity <= correspondingProduct.q + currentQuantity
         ) {
           quantityElement.textContent = newQuantity;
-          correspondingProduct.q -= quantityChange;
+          cartState = decreaseProductQuantity(
+            cartState,
+            productId,
+            quantityChange
+          );
         } else if (newQuantity <= 0) {
-          correspondingProduct.q += currentQuantity;
+          cartState = increaseProductQuantity(
+            cartState,
+            productId,
+            currentQuantity
+          );
           cartItemElement.remove();
         } else {
           alert('재고가 부족합니다.');
@@ -439,16 +423,21 @@ function main() {
           quantityElement.textContent,
           PARSING.radix
         );
-        correspondingProduct.q += removedQuantity;
+        cartState = increaseProductQuantity(
+          cartState,
+          productId,
+          removedQuantity
+        );
         cartItemElement.remove();
       }
+
       handleCartUpdate({
         cartDisp: cartDisplayArea,
-        prodList: productInventory,
+        prodList: getProductInventory(cartState),
       });
       handleSelectOptionsUpdate({
         sel: productSelector,
-        prodList: productInventory,
+        prodList: getProductInventory(cartState),
       });
     }
   });
