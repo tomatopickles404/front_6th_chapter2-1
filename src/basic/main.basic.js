@@ -1,5 +1,10 @@
 import { PRODUCT_DATA } from './constants/product-data.js';
-import { PRODUCT_IDS } from './constants/business-rules.js';
+import {
+  PRODUCT_IDS,
+  SALE_EVENTS,
+  TIMERS,
+  PARSING,
+} from './constants/business-rules.js';
 import {
   handleSelectOptionsUpdate,
   handleCartUpdate,
@@ -204,19 +209,27 @@ function main() {
   handleSelectOptionsUpdate({ sel, prodList });
   handleCartUpdate({ cartDisp, prodList });
 
-  const lightningDelay = Math.random() * 10000;
+  const lightningDelay = Math.random() * TIMERS.lightningDelayMax;
   setTimeout(() => {
     setInterval(() => {
       const luckyIdx = Math.floor(Math.random() * prodList.length);
       const luckyItem = prodList[luckyIdx];
       if (luckyItem.q > 0 && !luckyItem.onSale) {
-        luckyItem.val = Math.round((luckyItem.originalVal * 80) / 100);
+        luckyItem.val = Math.round(
+          luckyItem.originalVal * SALE_EVENTS.lightning.priceMultiplier
+        );
         luckyItem.onSale = true;
-        alert('⚡번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
+        alert(
+          '⚡번개세일! ' +
+            luckyItem.name +
+            '이(가) ' +
+            SALE_EVENTS.lightning.discountRate * 100 +
+            '% 할인 중입니다!'
+        );
         handleSelectOptionsUpdate({ sel, prodList });
         updatePricesInCart({ cartDisp, totalCount: 0 });
       }
-    }, 30000);
+    }, TIMERS.saleInterval);
   }, lightningDelay);
 
   setTimeout(() => {
@@ -242,14 +255,16 @@ function main() {
               suggest.name +
               '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!'
           );
-          suggest.val = Math.round((suggest.val * (100 - 5)) / 100);
+          suggest.val = Math.round(
+            suggest.val * SALE_EVENTS.suggestion.priceMultiplier
+          );
           suggest.suggestSale = true;
           handleSelectOptionsUpdate({ sel, prodList });
           updatePricesInCart({ cartDisp, totalCount: 0 });
         }
       }
     }, 60000);
-  }, Math.random() * 20000);
+  }, Math.random() * TIMERS.suggestionDelayMax);
 }
 
 main();
@@ -277,8 +292,11 @@ addBtn.addEventListener('click', () => {
     const item = document.getElementById(itemToAdd['id']);
     if (item) {
       const qtyElem = item.querySelector('.quantity-number');
-      const newQty = Number.parseInt(qtyElem['textContent'], 10) + 1;
-      if (newQty <= itemToAdd.q + Number.parseInt(qtyElem.textContent, 10)) {
+      const newQty = Number.parseInt(qtyElem['textContent'], PARSING.radix) + 1;
+      if (
+        newQty <=
+        itemToAdd.q + Number.parseInt(qtyElem.textContent, PARSING.radix)
+      ) {
         qtyElem.textContent = newQty;
         itemToAdd['q']--;
       } else {
@@ -374,9 +392,9 @@ cartDisp.addEventListener('click', event => {
       }
     }
     if (tgt.classList.contains('quantity-change')) {
-      const qtyChange = Number.parseInt(tgt.dataset.change, 10);
+      const qtyChange = Number.parseInt(tgt.dataset.change, PARSING.radix);
       const qtyElem = itemElem.querySelector('.quantity-number');
-      const currentQty = Number.parseInt(qtyElem.textContent, 10);
+      const currentQty = Number.parseInt(qtyElem.textContent, PARSING.radix);
       const newQty = currentQty + qtyChange;
       if (newQty > 0 && newQty <= prod.q + currentQty) {
         qtyElem.textContent = newQty;
@@ -389,7 +407,7 @@ cartDisp.addEventListener('click', event => {
       }
     } else if (tgt.classList.contains('remove-item')) {
       const qtyElem = itemElem.querySelector('.quantity-number');
-      const remQty = Number.parseInt(qtyElem.textContent, 10);
+      const remQty = Number.parseInt(qtyElem.textContent, PARSING.radix);
       prod.q += remQty;
       itemElem.remove();
     }
