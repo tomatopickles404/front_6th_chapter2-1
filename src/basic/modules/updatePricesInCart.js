@@ -1,8 +1,12 @@
+/**
+ * 장바구니 내 상품들의 총 수량을 계산
+ */
 export function updatePricesInCart({ cartDisp, totalCount }) {
-  for (let j = 0; j < cartDisp.children.length; j++) {
-    totalCount += Number.parseInt(
-      cartDisp.children[j].querySelector('.quantity-number').textContent,
-      10
-    );
-  }
+  const cartItems = Array.from(cartDisp.children);
+
+  return cartItems.reduce((count, cartItem) => {
+    const quantityElement = cartItem.querySelector('.quantity-number');
+    const quantity = parseInt(quantityElement.textContent, 10);
+    return count + quantity;
+  }, totalCount);
 }

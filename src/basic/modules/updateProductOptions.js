@@ -11,7 +11,6 @@ export function updateProductOptions({ sel, prodList }) {
     const option = document.createElement('option');
     option.value = product.id;
 
-    // 가격 표시 로직 (테스트 기대값에 맞춤)
     let priceDisplay = `${product.name} - ${product.val}원`;
 
     if (product.onSale || product.suggestSale) {
