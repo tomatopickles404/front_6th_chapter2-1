@@ -22,9 +22,11 @@ describe('basic 테스트', () => {
 
   const getCartItemQuantity = (cartDisp, productId) => {
     const item = cartDisp.querySelector(`#${productId}`);
-    if (!item) return 0;
+    if (!item) {
+      return 0;
+    }
     const qtyElement = item.querySelector('.quantity-number');
-    return qtyElement ? parseInt(qtyElement.textContent) : 0;
+    return qtyElement ? parseInt(qtyElement.textContent, 10) : 0;
   };
 
   describe.each([
