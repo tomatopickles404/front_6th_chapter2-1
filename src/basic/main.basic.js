@@ -1,8 +1,8 @@
 import { PRODUCT_DATA } from './constants/product-data.js';
 import { SALE_EVENTS, TIMERS } from './constants/business-rules.js';
 import {
-  handleSelectOptionsUpdate,
-  handleCartUpdate,
+  updateProductOptions,
+  updateCartDisplay,
   updatePricesInCart,
 } from './modules/index.js';
 import {
@@ -51,12 +51,11 @@ function main() {
   const cartDisplayArea = ui.cartDisplay.container;
 
   // 기존 모듈 함수들로 추가 UI 업데이트 (호환성 유지)
-  handleSelectOptionsUpdate({
+  updateProductOptions({
     sel: productSelector,
     prodList: getProductInventory(cartState),
   });
-
-  handleCartUpdate({
+  updateCartDisplay({
     cartDisp: cartDisplayArea,
     prodList: getProductInventory(cartState),
   });
@@ -81,7 +80,7 @@ function main() {
             SALE_EVENTS.lightning.discountRate * 100 +
             '% 할인 중입니다!'
         );
-        handleSelectOptionsUpdate({
+        updateProductOptions({
           sel: productSelector,
           prodList: getProductInventory(cartState),
         });
@@ -118,7 +117,7 @@ function main() {
             ),
             suggestSale: true,
           });
-          handleSelectOptionsUpdate({
+          updateProductOptions({
             sel: productSelector,
             prodList: getProductInventory(cartState),
           });

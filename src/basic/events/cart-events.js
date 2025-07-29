@@ -13,10 +13,7 @@ import {
   getProductInventory,
 } from '../state/cart.js';
 import { createCartItemElement } from '../utils/cart-helpers.js';
-import {
-  handleCartUpdate,
-  handleSelectOptionsUpdate,
-} from '../modules/index.js';
+import { updateCartDisplay, updateProductOptions } from '../modules/index.js';
 
 /**
  * 장바구니에 상품 추가 이벤트 핸들러
@@ -82,7 +79,7 @@ export const setupAddToCartEvent = ({
       }
 
       // UI 업데이트
-      handleCartUpdate({
+      updateCartDisplay({
         cartDisp: cartDisplayArea,
         prodList: getProductInventory(getCartState()),
       });
@@ -179,11 +176,11 @@ export const setupCartItemEvents = ({
       }
 
       // UI 업데이트
-      handleCartUpdate({
+      updateCartDisplay({
         cartDisp: cartDisplayArea,
         prodList: getProductInventory(getCartState()),
       });
-      handleSelectOptionsUpdate({
+      updateProductOptions({
         sel: productSelector,
         prodList: getProductInventory(getCartState()),
       });
