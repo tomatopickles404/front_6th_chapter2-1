@@ -19,16 +19,78 @@ import {
 } from './state/cart.js';
 import { createMainLayout } from './ui/index.js';
 import { setupManualEvents } from './events/index.js';
+import {
+  extractCartItemsFromDOM,
+  calculateTotalItemCount,
+  calculateTotalAmount,
+  generateStockStatus,
+  isTuesday,
+  createCartItemElement,
+} from './utils/cart-helpers.js';
 
 // 전역 상태 (함수형 - 단일 상태 객체)
 let cartState = createInitialCartState();
+
+// UI 요소 참조들
+let ui = null;
+
+/**
+ * Props 기반으로 UI 전체를 다시 렌더링
+ */
+function updateUI() {
+  if (!ui || !ui.cartDisplay) {
+    return; // UI가 초기화되지 않았으면 실행하지 않음
+  }
+
+  const productInventory = getProductInventory(cartState);
+  const cartItems = extractCartItemsFromDOM(
+    ui.cartDisplay.container,
+    productInventory
+  );
+  const itemCount = calculateTotalItemCount(ui.cartDisplay.container);
+  const cartTotal = calculateTotalAmount(
+    ui.cartDisplay.container,
+    productInventory
+  );
+  const stockStatus = generateStockStatus(productInventory);
+
+  // Props 데이터 구성
+  const props = {
+    itemCount,
+    products: productInventory,
+    stockStatus,
+    cartItems,
+    cartTotal,
+    loyaltyPoints: Math.floor(cartTotal * 0.001), // 기본 포인트 계산
+    discountInfo: '', // 할인 정보는 기존 모듈에서 처리
+    isTuesday: isTuesday(),
+  };
+
+  // UI 재렌더링 (Props 기반)
+  ui = createMainLayout(props);
+
+  // 이벤트 재설정
+  setupManualEvents(ui);
+}
 
 function main() {
   // 상태 초기화 (함수형 - 새로운 상태 반환)
   cartState = initializeCart(cartState, PRODUCT_DATA);
 
-  // UI 생성 (HTML 템플릿 시스템 사용)
-  const ui = createMainLayout();
+  // 초기 UI 생성 (빈 Props로 시작)
+  const productInventory = getProductInventory(cartState);
+  const stockStatus = generateStockStatus(productInventory);
+
+  ui = createMainLayout({
+    itemCount: 0,
+    products: productInventory,
+    stockStatus,
+    cartItems: [],
+    cartTotal: 0,
+    loyaltyPoints: 0,
+    discountInfo: '',
+    isTuesday: isTuesday(),
+  });
 
   // 이벤트 설정
   setupManualEvents(ui);
@@ -38,6 +100,7 @@ function main() {
   const addToCartButton = ui.productSelector.addButton;
   const cartDisplayArea = ui.cartDisplay.container;
 
+  // 기존 모듈 함수들로 추가 UI 업데이트 (호환성 유지)
   handleSelectOptionsUpdate({
     sel: productSelector,
     prodList: getProductInventory(cartState),
@@ -140,86 +203,8 @@ function main() {
           alert('재고가 부족합니다.');
         }
       } else {
-        const newCartItem = document.createElement('div');
-        newCartItem.id = itemToAdd.id;
-        newCartItem.className =
-          'grid grid-cols-[80px_1fr_auto] gap-5 py-5 border-b border-gray-100 first:pt-0 last:border-b-0 last:pb-0';
-        newCartItem.innerHTML = /* HTML */ `
-          <div class="w-20 h-20 bg-gradient-black relative overflow-hidden">
-            <div
-              class="absolute top-1/2 left-1/2 w-[60%] h-[60%] bg-white/10 -translate-x-1/2 -translate-y-1/2 rotate-45"
-            ></div>
-          </div>
-          <div>
-            <h3 class="text-base font-normal mb-1 tracking-tight">
-              ${itemToAdd.onSale && itemToAdd.suggestSale
-                ? '⚡💝'
-                : itemToAdd.onSale
-                  ? '⚡'
-                  : itemToAdd.suggestSale
-                    ? '💝'
-                    : ''}${itemToAdd.name}
-            </h3>
-            <p class="text-xs text-gray-500 mb-0.5 tracking-wide">PRODUCT</p>
-            <p class="text-xs text-black mb-3">
-              ${itemToAdd.onSale || itemToAdd.suggestSale
-                ? '<span class="line-through text-gray-400">₩' +
-                  itemToAdd.originalVal.toLocaleString() +
-                  '</span> <span class="' +
-                  (itemToAdd.onSale && itemToAdd.suggestSale
-                    ? 'text-purple-600'
-                    : itemToAdd.onSale
-                      ? 'text-red-500'
-                      : 'text-blue-500') +
-                  '">₩' +
-                  itemToAdd.val.toLocaleString() +
-                  '</span>'
-                : '₩' + itemToAdd.val.toLocaleString()}
-            </p>
-            <div class="flex items-center gap-4">
-              <button
-                class="quantity-change w-6 h-6 border border-black bg-white text-sm flex items-center justify-center transition-all hover:bg-black hover:text-white"
-                data-product-id="${itemToAdd.id}"
-                data-change="-1"
-              >
-                −
-              </button>
-              <span
-                class="quantity-number text-sm font-normal min-w-[20px] text-center tabular-nums"
-                >1</span
-              >
-              <button
-                class="quantity-change w-6 h-6 border border-black bg-white text-sm flex items-center justify-center transition-all hover:bg-black hover:text-white"
-                data-product-id="${itemToAdd.id}"
-                data-change="1"
-              >
-                +
-              </button>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="text-lg mb-2 tracking-tight tabular-nums">
-              ${itemToAdd.onSale || itemToAdd.suggestSale
-                ? '<span class="line-through text-gray-400">₩' +
-                  itemToAdd.originalVal.toLocaleString() +
-                  '</span> <span class="' +
-                  (itemToAdd.onSale && itemToAdd.suggestSale
-                    ? 'text-purple-600'
-                    : itemToAdd.onSale
-                      ? 'text-red-500'
-                      : 'text-blue-500') +
-                  '">₩' +
-                  itemToAdd.val.toLocaleString() +
-                  '</span>'
-                : '₩' + itemToAdd.val.toLocaleString()}
-            </div>
-            <a
-              class="remove-item text-2xs text-gray-500 uppercase tracking-wider cursor-pointer transition-colors border-b border-transparent hover:text-black hover:border-black"
-              data-product-id="${itemToAdd.id}"
-              >Remove</a
-            >
-          </div>
-        `;
+        // 🔄 DOM 조작 대신 CartItem 컴포넌트 사용
+        const newCartItem = createCartItemElement(itemToAdd, 1);
         cartDisplayArea.appendChild(newCartItem);
         cartState = decreaseProductQuantity(cartState, itemToAdd.id, 1);
       }

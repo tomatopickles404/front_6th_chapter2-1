@@ -4,24 +4,34 @@ import { CartDisplay } from '../components/CartDisplay.js';
 import { OrderSummary } from '../components/OrderSummary.js';
 import { ManualToggle, ManualOverlay } from '../components/ManualOverlay.js';
 
-export const MainLayout = () => {
+export const MainLayout = ({
+  itemCount = 0,
+  products = [],
+  stockStatus = '',
+  cartItems = [],
+  cartTotal = 0,
+  loyaltyPoints = 0,
+  discountInfo = '',
+  isTuesday = false,
+} = {}) => {
   return /* HTML */ `
-    ${Header()}
+    ${Header({ itemCount })}
     <div
       class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 flex-1 overflow-hidden"
     >
       <div class="bg-white border border-gray-200 p-8 overflow-y-auto">
-        ${ProductSelector()} ${CartDisplay()}
+        ${ProductSelector({ products, stockStatus })}
+        ${CartDisplay({ cartItems })}
       </div>
-      ${OrderSummary()}
+      ${OrderSummary({ cartTotal, loyaltyPoints, discountInfo, isTuesday })}
     </div>
     ${ManualToggle()} ${ManualOverlay()}
   `;
 };
 
-export const createMainLayout = () => {
+export const createMainLayout = (props = {}) => {
   const root = document.getElementById('app');
-  root.innerHTML = MainLayout();
+  root.innerHTML = MainLayout(props);
 
   // DOM 요소들을 참조하여 반환 (이벤트 핸들러에서 사용)
   return {

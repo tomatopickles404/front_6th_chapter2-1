@@ -15,7 +15,7 @@ export const createInitialCartState = () => ({
 
 // TODO: 함수 분리
 
-// ===== 상태 조회 =====
+// ===== 순수 함수들 (상태 조회) =====
 export const getProductInventory = state => [...state.productInventory];
 
 export const getProduct = (state, productId) =>
@@ -38,7 +38,7 @@ export const getLastSelectedProduct = state => state.lastSelectedProduct;
 export const getTotalStock = state =>
   state.productInventory.reduce((total, product) => total + product.q, 0);
 
-// ===== 상태 변환 =====
+// ===== 순수 함수들 (상태 변환) =====
 export const initializeCart = (state, productData) => ({
   ...state,
   productInventory: [...productData],
@@ -102,7 +102,7 @@ export const setProductInventory = (state, newInventory) => ({
   productInventory: [...newInventory],
 });
 
-// ===== 유틸리티 =====
+// ===== 유틸리티 함수들 =====
 export const canAddToCart = (state, productId, quantity = 1) => {
   const product = getProduct(state, productId);
   return product && product.q >= quantity;

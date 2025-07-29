@@ -1,4 +1,9 @@
-export const OrderSummary = () => {
+export const OrderSummary = ({
+  cartTotal = 0,
+  loyaltyPoints = 0,
+  discountInfo = '',
+  isTuesday = false,
+} = {}) => {
   return /* HTML */ `
     <div class="bg-black text-white p-8 flex flex-col">
       <h2 class="text-xs font-medium mb-5 tracking-extra-wide uppercase">
@@ -7,22 +12,24 @@ export const OrderSummary = () => {
       <div class="flex-1 flex flex-col">
         <div id="summary-details" class="space-y-3"></div>
         <div class="mt-auto">
-          <div id="discount-info" class="mb-4"></div>
+          <div id="discount-info" class="mb-4">${discountInfo}</div>
           <div id="cart-total" class="pt-5 border-t border-white/10">
             <div class="flex justify-between items-baseline">
               <span class="text-sm uppercase tracking-wider">Total</span>
-              <div class="text-2xl tracking-tight">₩0</div>
+              <div class="text-2xl tracking-tight">
+                ₩${cartTotal.toLocaleString()}
+              </div>
             </div>
             <div
               id="loyalty-points"
               class="text-xs text-blue-400 mt-2 text-right"
             >
-              적립 포인트: 0p
+              적립 포인트: ${loyaltyPoints}p
             </div>
           </div>
           <div
             id="tuesday-special"
-            class="mt-4 p-3 bg-white/10 rounded-lg hidden"
+            class="mt-4 p-3 bg-white/10 rounded-lg ${isTuesday ? '' : 'hidden'}"
           >
             <div class="flex items-center gap-2">
               <span class="text-2xs">🎉</span>
