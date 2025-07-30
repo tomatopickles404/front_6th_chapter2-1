@@ -6,7 +6,7 @@ import {
 import { createCartItemElement } from '../../utils/cart-helpers.js';
 import { updateCartDisplay } from '../../modules/index.js';
 import { PARSING } from '../../constants/business-rules.js';
-import { QUANTITY_CONSTANTS, ALERT_MESSAGES } from '../../constants/event.js';
+import { QUANTITY, ALERT_MESSAGES } from '../../constants/event.js';
 
 /**
  * 장바구니 추가 오케스트레이터
@@ -91,15 +91,12 @@ const addNewProductToCart = (
   cartState,
   setCartState
 ) => {
-  const newCartItem = createCartItemElement(
-    itemToAdd,
-    QUANTITY_CONSTANTS.increment
-  );
+  const newCartItem = createCartItemElement(itemToAdd, QUANTITY.increment);
   cartDisplayArea.appendChild(newCartItem);
   const newCartState = decreaseProductQuantity(
     cartState,
     itemToAdd.id,
-    QUANTITY_CONSTANTS.increment
+    QUANTITY.increment
   );
   setCartState(newCartState);
 };
@@ -118,14 +115,14 @@ const increaseExistingProductQuantity = (
     quantityElement.textContent,
     PARSING.radix
   );
-  const newQuantity = currentQuantity + QUANTITY_CONSTANTS.increment;
+  const newQuantity = currentQuantity + QUANTITY.increment;
 
   if (newQuantity <= itemToAdd.q + currentQuantity) {
     quantityElement.textContent = newQuantity;
     const newCartState = decreaseProductQuantity(
       cartState,
       itemToAdd.id,
-      QUANTITY_CONSTANTS.increment
+      QUANTITY.increment
     );
     setCartState(newCartState);
     return true;

@@ -3,10 +3,9 @@
  */
 
 // 수량 변경 관련 상수
-export const QUANTITY_CONSTANTS = {
+export const QUANTITY = {
   increment: 1,
   decrement: -1,
-  minQuantity: 0,
 };
 
 // 유효성 검증 결과 상수
@@ -37,6 +36,7 @@ export const ALERT_MESSAGES = {
   tuesdaySpecial: '🌟 화요일 추가 할인',
   bulkPurchaseDiscount: '🎉 대량구매 할인 (30개 이상)',
   itemDiscount: '{productName} (10개↑)',
+  outOfStock: '품절된 상품입니다.',
 };
 
 // 할인율 상수
@@ -52,30 +52,44 @@ export const DISCOUNT_RATES = {
 
 // 수량 기준 상수
 export const QUANTITY_THRESHOLDS = {
-  bulkPurchase: 30,
-  individualDiscount: 10,
   lowStock: 5,
+  individualDiscount: 10,
+  bulkDiscount: 30,
 };
 
 // 포인트 관련 상수
-export const POINTS_CONSTANTS = {
-  baseRate: 1000, // 1000원당 1포인트
-  keyboardMouseSet: 50, // 키보드+마우스 세트
-  fullSet: 100, // 풀세트
-  bulk10: 20, // 10개 이상
-  bulk20: 50, // 20개 이상
-  bulk30: 100, // 30개 이상
-  tuesdayMultiplier: 2, // 화요일 2배
+export const POINTS = {
+  baseRate: 1000,
+  keyboardMouseSet: 50,
+  fullSet: 100,
+  bulk10: 20,
+  bulk20: 50,
+  bulk30: 100,
+  tuesdayMultiplier: 2,
+};
+
+// 할인 관련 상수
+export const DISCOUNT = {
+  individualThreshold: 10,
+  bulkThreshold: 30,
+  bulkDiscountRate: 0.25,
+  tuesdayDiscountRate: 0.1,
+  tuesdayDay: 2,
+};
+
+// 재고 관련 상수
+export const STOCK = {
+  lowStockThreshold: 5,
 };
 
 // 날짜 관련 상수
-export const DATE_CONSTANTS = {
-  tuesday: 2, // getDay()에서 화요일은 2
+export const DATE = {
+  tuesday: 2,
 };
 
 // 타이머 관련 상수
-export const TIMER_CONSTANTS = {
-  suggestionDelay: 60000, // 60초
+export const TIMER = {
+  suggestionDelay: 60000,
 };
 
 // UI 텍스트 상수
@@ -114,4 +128,9 @@ export const CSS_STYLES = {
     bold: 'bold',
     normal: 'normal',
   },
+  display: {
+    block: 'block',
+    none: 'none',
+  },
+  hiddenClass: 'hidden',
 };
