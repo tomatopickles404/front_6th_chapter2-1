@@ -3,7 +3,6 @@
  * 상품 목록을 기반으로 선택 옵션을 동적으로 생성
  */
 export function updateProductOptions({ sel, prodList }) {
-  // 기존 옵션 제거
   sel.innerHTML = '';
 
   // 상품별 옵션 생성

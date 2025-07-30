@@ -13,8 +13,6 @@ export const createInitialCartState = () => ({
   lastSelectedProduct: null,
 });
 
-// TODO: 함수 분리
-
 // ===== 순수 함수들 (상태 조회) =====
 export const getProductInventory = state => [...state.productInventory];
 
@@ -80,7 +78,6 @@ export const increaseProductQuantity = (state, productId, amount = 1) => ({
     product.id === productId ? { ...product, q: product.q + amount } : product
   ),
 });
-
 export const updateProductSaleStatus = (state, productId, saleInfo) => ({
   ...state,
   productInventory: state.productInventory.map(product =>

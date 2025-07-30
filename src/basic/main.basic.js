@@ -21,10 +21,9 @@ let cartState = createInitialCartState();
 let ui = null;
 
 function main() {
-  // 1. 상태 초기화 (함수형 - 새로운 상태 반환)
   cartState = initializeCart(cartState, PRODUCT_DATA);
 
-  // 2. 초기 UI 생성 (빈 Props로 시작)
+  // 초기 UI 생성
   const productInventory = getProductInventory(cartState);
   const stockStatus = generateStockStatus(productInventory);
 
@@ -39,15 +38,15 @@ function main() {
     isTuesday: isTuesday(),
   });
 
-  // 4. 이벤트 설정
+  // 이벤트 설정
   setupManualEvents(ui);
 
-  // 5. UI 요소들 추출 (이벤트 핸들러에서 사용)
+  // 이벤트 핸들러에서 사용할 UI 요소들 추출
   const productSelector = ui.productSelector.selector;
   const addToCartButton = ui.productSelector.addButton;
   const cartDisplayArea = ui.cartDisplay.container;
 
-  // 6. 기존 모듈 함수들로 추가 UI 업데이트 (호환성 유지)
+  // 기존 모듈 함수들로 추가 UI 업데이트
   updateProductOptions({
     sel: productSelector,
     prodList: getProductInventory(cartState),
@@ -58,11 +57,11 @@ function main() {
     prodList: getProductInventory(cartState),
   });
 
-  // 7. 사이드 이펙트 설정
+  // 사이드 이펙트 설정 (알림)
   useLightningSaleEffect(cartState, ui);
   useSuggestionSaleEffect(cartState, ui);
 
-  // 8. 기존 이벤트 설정 (호환성 유지)
+  // 기존 이벤트 설정 (호환성 유지)
   setupAddToCartEvent({
     addToCartButton,
     productSelector,

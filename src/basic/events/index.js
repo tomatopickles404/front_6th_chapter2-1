@@ -1,2 +1,3 @@
-export { setupManualEvents } from './manual-events.js';
-export { setupAddToCartEvent, setupCartItemEvents } from './cart-events.js';
+export * from './manual-events.js';
+export * from './setupAddToCartEvent.js';
+export * from './setupCartItemEvents.js';
