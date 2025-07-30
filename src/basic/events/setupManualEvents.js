@@ -3,7 +3,7 @@
  * DOM 기반 이벤트 처리
  */
 
-export const setupManualEvents = ui => {
+export function setupManualEvents(ui) {
   const { toggle, overlay, column } = ui.manualOverlay;
 
   // 토글 버튼 클릭 이벤트
@@ -26,4 +26,4 @@ export const setupManualEvents = ui => {
     overlay.classList.add('hidden');
     column.classList.add('translate-x-full');
   });
-};
+}
