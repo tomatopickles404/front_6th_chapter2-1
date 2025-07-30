@@ -5,7 +5,7 @@ import {
 } from '../../state/cart.js';
 import { updateCartDisplay } from '../../modules/index.js';
 import { updateProductOptions } from '../../modules/updateProductOptions.js';
-import { ALERT_MESSAGES } from '../../constants/event.js';
+import { ALERT_MESSAGES } from '../../../shared/constants/event.js';
 
 /**
  * 장바구니 아이템 클릭 이벤트 라우터

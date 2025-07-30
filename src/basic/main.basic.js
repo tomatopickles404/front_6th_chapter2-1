@@ -1,4 +1,4 @@
-import { PRODUCT_DATA } from './constants/product-data.js';
+import { PRODUCT_DATA } from '../shared/constants/product-data.js';
 import { updateProductOptions, updateCartDisplay } from './modules/index.js';
 import {
   createInitialCartState,
@@ -11,7 +11,10 @@ import {
   setupAddToCartEvent,
   setupCartItemEvents,
 } from './events/index.js';
-import { generateStockStatus, isTuesday } from './utils/cart-helpers.js';
+import {
+  generateStockStatus,
+  isTuesday,
+} from '../shared/utils/cart-helpers.js';
 import {
   useLightningSaleEffect,
   useSuggestionSaleEffect,

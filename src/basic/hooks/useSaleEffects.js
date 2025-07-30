@@ -1,4 +1,4 @@
-import { SALE_EVENTS, TIMERS } from '../constants/business-rules.js';
+import { SALE_EVENTS, TIMERS } from '../../shared/constants/business-rules.js';
 import { updateProductSaleStatus, getProductInventory } from '../state/cart.js';
 import { updateProductOptions, updatePricesInCart } from '../modules/index.js';
 

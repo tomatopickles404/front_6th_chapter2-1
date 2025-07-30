@@ -3,10 +3,10 @@ import {
   getProduct,
   setLastSelectedProduct,
 } from '../../state/cart.js';
-import { createCartItemElement } from '../../utils/cart-helpers.js';
+import { CartItem } from '../../ui/components/CartItem.js';
 import { updateCartDisplay } from '../../modules/index.js';
-import { PARSING } from '../../constants/business-rules.js';
-import { QUANTITY, ALERT_MESSAGES } from '../../constants/event.js';
+import { PARSING } from '../../../shared/constants/business-rules.js';
+import { QUANTITY, ALERT_MESSAGES } from '../../../shared/constants/event.js';
 
 /**
  * 장바구니 추가 오케스트레이터
@@ -99,6 +99,18 @@ const addNewProductToCart = (
     QUANTITY.increment
   );
   setCartState(newCartState);
+};
+
+/**
+ * CartItem 컴포넌트를 DOM 요소로 생성
+ * @param {Object} product - 상품 정보
+ * @param {number} quantity - 수량
+ * @returns {HTMLElement} DOM 요소
+ */
+const createCartItemElement = (product, quantity = 1) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = CartItem({ product, quantity });
+  return tempDiv.firstElementChild;
 };
 
 /**

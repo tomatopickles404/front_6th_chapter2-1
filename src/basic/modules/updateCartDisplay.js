@@ -1,5 +1,10 @@
-import { PRODUCT_IDS } from '../constants/business-rules.js';
-import { DISCOUNT, POINTS, STOCK, CSS_STYLES } from '../constants/event.js';
+import { PRODUCT_IDS } from '../../shared/constants/business-rules.js';
+import {
+  DISCOUNT,
+  POINTS,
+  STOCK,
+  CSS_STYLES,
+} from '../../shared/constants/event.js';
 import { updateStockDisplay } from './updateStockDisplay.js';
 
 /**
