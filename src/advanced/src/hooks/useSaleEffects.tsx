@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useCart } from 'hooks';
+import { useEffect, useCallback } from 'react';
+import { useCart } from 'context/CartProvider';
 import { Product } from 'types';
 import { SALE_EVENTS, TIMERS } from 'shared/constants/business-rules';
 
@@ -91,30 +91,4 @@ export function useSaleEffects() {
       if (suggestionInterval) clearInterval(suggestionInterval);
     };
   }, [handleLightningSale, handleSuggestionSale]);
-}
-
-/**
- * 개별 상품의 번개세일 타이머 Hook
- */
-export function useLightningSaleTimer(productId: string) {
-  const [isOnSale, setIsOnSale] = useState(false);
-  const { updateSaleStatus } = useCart();
-
-  const endSale = useCallback(() => {
-    updateSaleStatus(productId, {
-      onSale: false,
-    });
-    setIsOnSale(false);
-  }, [productId, updateSaleStatus]);
-
-  useEffect(() => {
-    if (!isOnSale) return;
-
-    // 30초 후 세일 종료
-    const timer = setTimeout(endSale, SALE_EVENTS.lightning.duration);
-
-    return () => clearTimeout(timer);
-  }, [isOnSale, endSale]);
-
-  return { isOnSale, setIsOnSale };
 }

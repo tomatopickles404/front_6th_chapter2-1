@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useCart } from 'hooks';
+import { useCart } from 'context/CartProvider';
 import { Product } from 'types';
 import { commaizeNumber } from 'utils/commaizeNumberWithIUnit';
 import { UI_TEXTS } from 'shared/constants/event';

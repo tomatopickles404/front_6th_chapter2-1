@@ -1,4 +1,4 @@
-import { useCart } from 'hooks';
+import { useCart } from 'context';
 import { CartItem } from './CartItem';
 
 export function CartDisplay() {

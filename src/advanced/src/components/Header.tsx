@@ -1,4 +1,4 @@
-import { useCart } from 'hooks';
+import { useCart } from 'context/CartProvider';
 
 export function Header() {
   const { cartItems } = useCart();

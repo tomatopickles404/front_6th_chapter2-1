@@ -1,4 +1,5 @@
-import { useCart, useOrderSummary } from 'hooks';
+import { useCart } from 'context/CartProvider';
+import { useOrderSummary } from 'hooks';
 import { UI_TEXTS } from 'shared/constants/event';
 import {
   OrderSummaryHeader,

@@ -1,6 +1,8 @@
-import { createContext, useContext } from 'react';
 import { Product } from 'types';
 import { useNewCart } from 'hooks';
+import { createSafeContext } from 'utils/createSafeContext';
+
+const CART = 'Cart';
 
 interface CartContextType {
   // 상품 관련
@@ -27,26 +29,16 @@ interface CartContextType {
   clearCart: () => void;
 }
 
-const CartContext = createContext<CartContextType | null>(null);
+const [Provider, useCartContext] = createSafeContext<CartContextType>(CART);
 
-export function CartProvider({
-  children,
-  initialProducts,
-}: {
+export const useCart = () => useCartContext(CART);
+
+interface CartProviderProps {
   children: React.ReactNode;
   initialProducts: Product[];
-}) {
+}
+export function CartProvider({ children, initialProducts }: CartProviderProps) {
   const cartData = useNewCart({ initialProducts });
 
-  return (
-    <CartContext.Provider value={cartData}>{children}</CartContext.Provider>
-  );
+  return <Provider {...cartData}>{children}</Provider>;
 }
-
-export const useCart = (): CartContextType => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within CartProvider');
-  }
-  return context;
-};

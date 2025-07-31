@@ -1,4 +1,4 @@
-import { CartProvider, useSaleEffects, useShowHelp } from 'hooks';
+import { useSaleEffects, useShowHelp } from 'hooks';
 import {
   Header,
   ProductSelector,
@@ -6,14 +6,9 @@ import {
   OrderSummary,
   ManualOverlay,
 } from 'components';
-import { PRODUCT_DATA } from 'shared/constants/products';
 
 export default function App() {
-  return (
-    <CartProvider initialProducts={PRODUCT_DATA}>
-      <AppContent />
-    </CartProvider>
-  );
+  return <AppContent />;
 }
 
 function AppContent() {

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Product, SaleInfo } from '../types';
-import { useNewCart } from '../hooks/useNewCart';
-import { createSafeContext } from '../utils/createSafeContext';
+import { Product, SaleInfo } from 'types';
+import { useNewCart } from 'hooks';
+import { createSafeContext } from 'utils/createSafeContext';
 
 interface NewCartContextType {
   // 상품 관련

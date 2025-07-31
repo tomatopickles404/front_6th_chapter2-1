@@ -15,6 +15,7 @@ export default defineConfig({
       utils: resolve(__dirname, './src/utils'),
       constants: resolve(__dirname, './src/constants'),
       shared: resolve(__dirname, '../shared'),
+      context: resolve(__dirname, './src/context'),
     },
   },
   server: {

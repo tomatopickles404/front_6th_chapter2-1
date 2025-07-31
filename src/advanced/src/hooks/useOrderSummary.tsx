@@ -1,4 +1,4 @@
-import { useCart } from './useCart';
+import { useCart } from 'context/CartProvider';
 import { getItemDiscount, isTuesday } from 'utils/cartCalculations';
 
 interface OrderSummaryData {

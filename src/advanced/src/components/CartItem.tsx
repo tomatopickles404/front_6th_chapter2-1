@@ -1,4 +1,4 @@
-import { useCart } from 'hooks';
+import { useCart } from 'context/CartProvider';
 import { Product } from 'types';
 import { commaizeNumber } from 'utils/commaizeNumberWithIUnit';
 import { CartItemProps } from 'types';

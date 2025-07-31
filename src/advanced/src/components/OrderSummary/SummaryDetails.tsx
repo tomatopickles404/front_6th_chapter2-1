@@ -3,7 +3,6 @@ import { SubtotalSection } from './SubtotalSection';
 import { BulkDiscountSection } from './BulkDiscountSection';
 import { IndividualDiscountsSection } from './IndividualDiscountsSection';
 import { TuesdayDiscountSection } from './TuesdayDiscountSection';
-import { ShippingNotice } from './ShippingNotice';
 
 interface SummaryDetailsProps {
   cartItems: Array<{ product: any; quantity: number }>;
@@ -32,7 +31,6 @@ export function SummaryDetails({
         itemDiscounts={itemDiscounts}
       />
       <TuesdayDiscountSection showTuesdayDiscount={showTuesdayDiscount} />
-      <ShippingNotice />
     </div>
   );
 }
