@@ -28,8 +28,8 @@ interface UseNewCartReturn {
 
   // 액션 관련
   addToCart: (productId: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, change: number) => void;
+  handleRemove: (productId: string) => void;
+  handleQuantityChange: (productId: string, change: number) => void;
   updateSaleStatus: (productId: string, saleInfo: SaleInfo) => void;
   clearCart: () => void;
 }
@@ -52,7 +52,7 @@ export function useNewCart({
   const totals = getCartTotals(cartItems);
   const stockStatus = getStockStatus(products);
 
-  const { addToCart, removeFromCart, updateQuantity } = useCartActions({
+  const { addToCart, handleRemove, handleQuantityChange } = useCartActions({
     products,
     getProduct,
     updateStock,
@@ -72,8 +72,8 @@ export function useNewCart({
     discountInfo: totals.discountInfo,
     stockStatus,
     addToCart,
-    removeFromCart,
-    updateQuantity,
+    handleRemove,
+    handleQuantityChange,
     updateSaleStatus,
     clearCart,
   };

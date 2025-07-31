@@ -23,29 +23,24 @@ export function useSaleManager({
   products,
   updateSaleStatus,
 }: SaleManagerProps): SaleManagerReturn {
-  const findLuckyItem = (): Product | null => {
-    if (products.length === 0) return null;
+  const lightningSaleConfig = {
+    delay: Math.random() * TIMERS.lightningDelayMax,
+    interval: TIMERS.saleInterval,
+  };
+
+  const suggestionSaleConfig = {
+    delay: 60000,
+    interval: 60000,
+  };
+
+  const startLightningSale = () => {
+    if (products.length === 0) return;
 
     const luckyIdx = Math.floor(Math.random() * products.length);
     const luckyItem = products[luckyIdx];
 
-    return luckyItem.q > 0 && !luckyItem.onSale ? luckyItem : null;
-  };
-
-  // 추천세일 대상 상품 찾기
-  const findSuggestedProduct = (): Product | null => {
-    return (
-      products.find(
-        (product: Product) => product.q > 0 && !product.suggestSale
-      ) || null
-    );
-  };
-
-  // 번개세일 시작 함수
-  const startLightningSale = () => {
-    const luckyItem = findLuckyItem();
-
-    if (luckyItem) {
+    if (luckyItem && luckyItem.q > 0 && !luckyItem.onSale) {
+      alert(`⚡ 번개세일! ${luckyItem.name}이(가) 20% 할인됩니다!`);
       updateSaleStatus(luckyItem.id, {
         val: Math.round(
           luckyItem.originalVal * SALE_EVENTS.lightning.priceMultiplier
@@ -55,11 +50,13 @@ export function useSaleManager({
     }
   };
 
-  // 추천세일 시작 함수
   const startSuggestionSale = () => {
-    const suggestedProduct = findSuggestedProduct();
+    const suggestedProduct = products.find(
+      (product: Product) => product.q > 0 && !product.suggestSale
+    );
 
     if (suggestedProduct) {
+      alert(`💡 추천세일! ${suggestedProduct.name}을(를) 5% 할인해드립니다!`);
       updateSaleStatus(suggestedProduct.id, {
         val: Math.round(
           suggestedProduct.val * SALE_EVENTS.suggestion.priceMultiplier
@@ -67,17 +64,6 @@ export function useSaleManager({
         suggestSale: true,
       });
     }
-  };
-
-  // 세일 설정 정보
-  const lightningSaleConfig = {
-    delay: Math.random() * TIMERS.lightningDelayMax,
-    interval: TIMERS.saleInterval,
-  };
-
-  const suggestionSaleConfig = {
-    delay: 60000, // 60초
-    interval: 60000, // 60초
   };
 
   return {

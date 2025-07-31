@@ -19,16 +19,18 @@ export function useSaleEffects() {
     let lightningInterval: ReturnType<typeof setInterval> | null = null;
     let suggestionInterval: ReturnType<typeof setInterval> | null = null;
 
-    // 번개세일 시작
+    // 번개세일 시작 (basic과 동일한 로직)
     const lightningTimer = setTimeout(() => {
+      startLightningSale(); // 즉시 한 번 실행
       lightningInterval = setInterval(
         startLightningSale,
         lightningSaleConfig.interval
       );
     }, lightningSaleConfig.delay);
 
-    // 추천세일 시작
+    // 추천세일 시작 (basic과 동일한 로직)
     const suggestionTimer = setTimeout(() => {
+      startSuggestionSale(); // 즉시 한 번 실행
       suggestionInterval = setInterval(
         startSuggestionSale,
         suggestionSaleConfig.interval

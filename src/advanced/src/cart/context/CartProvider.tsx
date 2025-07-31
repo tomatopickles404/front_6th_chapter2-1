@@ -23,8 +23,8 @@ interface CartContextType {
 
   // 액션 관련
   addToCart: (productId: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, change: number) => void;
+  handleRemove: (productId: string) => void;
+  handleQuantityChange: (productId: string, change: number) => void;
   updateSaleStatus: (productId: string, saleInfo: any) => void;
   clearCart: () => void;
 }

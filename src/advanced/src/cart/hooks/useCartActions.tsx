@@ -37,7 +37,7 @@ export function useCartActions({
     addItem(productId, 1);
   };
 
-  const removeFromCart = (productId: string) => {
+  const handleRemove = (productId: string) => {
     const currentQuantity = getItemQuantity(productId);
 
     if (currentQuantity > 0) {
@@ -46,12 +46,12 @@ export function useCartActions({
     }
   };
 
-  const updateQuantity = (productId: string, change: number) => {
+  const handleQuantityChange = (productId: string, change: number) => {
     const currentQuantity = getItemQuantity(productId);
     const newQuantity = currentQuantity + change;
 
     if (newQuantity <= 0) {
-      removeFromCart(productId);
+      handleRemove(productId);
       return;
     }
 
@@ -74,7 +74,7 @@ export function useCartActions({
 
   return {
     addToCart,
-    removeFromCart,
-    updateQuantity,
+    handleRemove,
+    handleQuantityChange,
   };
 }
