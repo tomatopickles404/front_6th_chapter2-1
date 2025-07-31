@@ -1,12 +1,13 @@
-import React from 'react';
-import { useCart } from '../hooks/useCart';
+import { useState, useEffect } from 'react';
+import { useCart } from 'hooks';
 
-export const ProductSelector: React.FC = () => {
+export function ProductSelector() {
   const { state, stockStatus, addToCart } = useCart();
-  const [selectedProductId, setSelectedProductId] = React.useState('');
+  const [selectedProductId, setSelectedProductId] = useState('');
   const products = state.productInventory;
 
-  React.useEffect(() => {
+  //FIXME: 개선
+  useEffect(() => {
     if (products.length > 0 && !selectedProductId) {
       setSelectedProductId(products[0].id);
     }
@@ -66,4 +67,4 @@ export const ProductSelector: React.FC = () => {
       </div>
     </div>
   );
-};
+}

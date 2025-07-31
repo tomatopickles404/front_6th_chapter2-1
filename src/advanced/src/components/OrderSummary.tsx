@@ -1,10 +1,9 @@
-import React from 'react';
-import { useCart } from '../hooks/useCart';
+import { useCart } from 'hooks';
 
-export const OrderSummary: React.FC = () => {
+export function OrderSummary() {
   const { cartTotal, loyaltyPoints, discountInfo } = useCart();
-  // Note: isTuesday is imported in useCart hook
   const isTuesday = new Date().getDay() === 2;
+
   return (
     <div className="bg-black text-white p-8 flex flex-col">
       <h2 className="text-xs font-medium mb-5 tracking-extra-wide uppercase">
@@ -54,4 +53,4 @@ export const OrderSummary: React.FC = () => {
       </p>
     </div>
   );
-};
+}

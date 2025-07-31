@@ -47,14 +47,9 @@ export interface CartDisplayProps {
   cartItems?: CartItem[];
 }
 
-export interface ManualOverlayProps {
-  isOpen?: boolean;
-  onClose?: () => void;
-}
-
 // Event handler types
 export interface CartEventHandlers {
   onAddToCart: (productId: string) => void;
   onRemoveFromCart: (productId: string) => void;
   onQuantityChange: (productId: string, change: number) => void;
-} 
+}

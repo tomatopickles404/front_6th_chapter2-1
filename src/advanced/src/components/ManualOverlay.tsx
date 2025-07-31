@@ -1,13 +1,11 @@
-import React from 'react';
-import { ManualOverlayProps } from '../types';
+interface ManualOverlayProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
 
-export const ManualOverlay: React.FC<ManualOverlayProps> = ({
-  isOpen = false,
-  onClose,
-}) => {
+export function ManualOverlay({ isOpen = false, onClose }: ManualOverlayProps) {
   return (
     <>
-      {/* Modal Overlay - basic과 동일한 구조 */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 ${isOpen ? '' : 'hidden'}`}
         onClick={onClose}
@@ -64,4 +62,4 @@ export const ManualOverlay: React.FC<ManualOverlayProps> = ({
       </div>
     </>
   );
-};
+}

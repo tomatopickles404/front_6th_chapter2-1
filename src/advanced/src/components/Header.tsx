@@ -1,7 +1,6 @@
-import React from 'react';
-import { useCart } from '../hooks/useCart';
+import { useCart } from 'hooks';
 
-export const Header: React.FC = () => {
+export function Header() {
   const { cartItems } = useCart();
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
@@ -16,4 +15,4 @@ export const Header: React.FC = () => {
       </p>
     </div>
   );
-};
+}
