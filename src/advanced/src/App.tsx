@@ -1,11 +1,8 @@
-import { useSaleEffects, useShowHelp } from 'hooks';
-import {
-  Header,
-  ProductSelector,
-  CartDisplay,
-  OrderSummary,
-  ManualOverlay,
-} from 'components';
+import { useSaleEffects, useShowHelp } from 'shared/hooks';
+import { Header } from 'shared/components';
+import { ProductSelector } from 'product/components';
+import { CartDisplay, ManualOverlay } from 'cart/components';
+import { OrderSummary } from 'order/components';
 
 export default function App() {
   return <AppContent />;

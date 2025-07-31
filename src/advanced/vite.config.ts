@@ -9,13 +9,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '*': resolve(__dirname, './src'),
-      components: resolve(__dirname, './src/components'),
-      hooks: resolve(__dirname, './src/hooks'),
-      types: resolve(__dirname, './src/types'),
-      utils: resolve(__dirname, './src/utils'),
-      constants: resolve(__dirname, './src/constants'),
-      shared: resolve(__dirname, '../shared'),
-      context: resolve(__dirname, './src/context'),
+      cart: resolve(__dirname, './src/cart'),
+      product: resolve(__dirname, './src/product'),
+      order: resolve(__dirname, './src/order'),
+      shared: resolve(__dirname, './src/shared'),
+      '@shared': resolve(__dirname, '../shared'),
     },
   },
   server: {

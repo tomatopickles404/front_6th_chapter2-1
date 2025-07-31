@@ -24,7 +24,11 @@
     "baseUrl": ".",
     "paths": {
       "*": ["./src/*"],
-      "shared/*": ["../shared/*"]
+      "cart/*": ["./src/cart/*"],
+      "product/*": ["./src/product/*"],
+      "order/*": ["./src/order/*"],
+      "shared/*": ["./src/shared/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
   "include": ["src"],
