@@ -46,13 +46,26 @@ pnpm lint
 
 ```
 src/
-├── components/     # React 컴포넌트들
-├── hooks/         # 커스텀 훅들
-├── utils/         # 유틸리티 함수들
-├── constants/     # 상수 데이터
-├── types/         # TypeScript 타입 정의
-├── App.tsx        # 메인 앱 컴포넌트
-└── main.tsx       # 앱 진입점
+├── cart/                    # 장바구니 도메인
+│   ├── components/         # 장바구니 관련 컴포넌트
+│   ├── context/           # 장바구니 상태 관리
+│   ├── hooks/             # 장바구니 관련 커스텀 훅
+│   └── utils/             # 장바구니 유틸리티
+├── order/                  # 주문 도메인
+│   ├── components/         # 주문 관련 컴포넌트
+│   └── hooks/             # 주문 관련 커스텀 훅
+├── product/                # 상품 도메인
+│   ├── components/         # 상품 관련 컴포넌트
+│   ├── hooks/             # 상품 관련 커스텀 훅
+│   └── utils/             # 상품 유틸리티
+├── shared/                 # 공통 모듈
+│   ├── components/         # 공통 컴포넌트
+│   ├── hooks/             # 공통 커스텀 훅
+│   └── utils/             # 공통 유틸리티
+├── types/                  # TypeScript 타입 정의
+├── App.tsx                 # 메인 앱 컴포넌트
+├── main.tsx               # 앱 진입점
+└── index.css              # 전역 스타일
 ```
 
 ## 마이그레이션 계획
