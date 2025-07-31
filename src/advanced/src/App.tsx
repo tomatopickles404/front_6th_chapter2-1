@@ -8,7 +8,7 @@ import {
 } from 'components';
 import { PRODUCT_DATA } from 'shared/constants/products';
 
-function App() {
+export default function App() {
   return (
     <CartProvider initialProducts={PRODUCT_DATA}>
       <AppContent />
@@ -17,8 +17,6 @@ function App() {
 }
 
 function AppContent() {
-  const { showHelp, handleShowHelp, handleCloseHelp } = useShowHelp();
-
   // 실시간 세일 효과 활성화
   useSaleEffects();
 
@@ -29,31 +27,43 @@ function AppContent() {
     >
       <Header />
 
-      <div>
-        <div>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 flex-1 overflow-hidden">
-            <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
-              <ProductSelector />
-              <CartDisplay />
-            </div>
+      <MainContent />
+    </div>
+  );
+}
 
-            <OrderSummary />
-          </div>
+function MainContent() {
+  return (
+    <div>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 flex-1 overflow-hidden">
+        <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
+          <ProductSelector />
+          <CartDisplay />
         </div>
 
-        <ManualOverlay isOpen={showHelp} onClose={handleCloseHelp} />
+        <OrderSummary />
 
-        {!showHelp && (
-          <button
-            className="fixed top-4 right-4 bg-black text-white w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold hover:bg-gray-800 transition-all z-50"
-            onClick={handleShowHelp}
-          >
-            ?
-          </button>
-        )}
+        <HelpButton />
       </div>
     </div>
   );
 }
 
-export default App;
+function HelpButton() {
+  const { showHelp, handleShowHelp, handleCloseHelp } = useShowHelp();
+
+  return (
+    <div>
+      <ManualOverlay isOpen={showHelp} onClose={handleCloseHelp} />
+
+      {!showHelp && (
+        <button
+          className="fixed top-4 right-4 bg-black text-white w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold hover:bg-gray-800 transition-all z-50"
+          onClick={handleShowHelp}
+        >
+          ?
+        </button>
+      )}
+    </div>
+  );
+}
