@@ -1,22 +1,7 @@
 import { useCart } from 'cart/context';
-import { getItemDiscount, isTuesday } from 'cart/utils';
+import { getItemDiscount, isTuesday } from 'cart/utils/cartCalculations';
 
-interface OrderSummaryData {
-  subtotal: number;
-  totalQuantity: number;
-
-  isCurrentlyTuesday: boolean;
-  itemDiscounts: Array<{
-    name: string;
-    discount: number;
-  }>;
-
-  showBulkDiscount: boolean;
-  showIndividualDiscounts: boolean;
-  showTuesdayDiscount: boolean;
-}
-
-export function useOrderSummary(): OrderSummaryData {
+export function useOrderSummary() {
   const { cartItems, cartTotal } = useCart();
 
   const subtotal = cartItems.reduce((sum, { product, quantity }) => {

@@ -1,4 +1,4 @@
-import { Product } from 'types';
+import { Product, SaleInfo } from 'types';
 import { useNewCart } from 'cart/hooks';
 import { createSafeContext } from 'shared/utils';
 
@@ -9,7 +9,7 @@ interface CartContextType {
   products: Product[];
   getProduct: (productId: string) => Product | null;
 
-  // 장바구니 관련
+  // 장바구니 아이템 관련
   cartItems: Array<{ product: Product; quantity: number }>;
   getItemQuantity: (productId: string) => number;
 
@@ -18,14 +18,14 @@ interface CartContextType {
   loyaltyPoints: number;
   discountInfo: string;
 
-  // 상태 관련
+  // 재고 관련
   stockStatus: string;
 
   // 액션 관련
   addToCart: (productId: string) => void;
   handleRemove: (productId: string) => void;
   handleQuantityChange: (productId: string, change: number) => void;
-  updateSaleStatus: (productId: string, saleInfo: any) => void;
+  updateSaleStatus: (productId: string, saleInfo: SaleInfo) => void;
   clearCart: () => void;
 }
 
@@ -37,6 +37,7 @@ interface CartProviderProps {
   children: React.ReactNode;
   initialProducts: Product[];
 }
+
 export function CartProvider({ children, initialProducts }: CartProviderProps) {
   const cartData = useNewCart({ initialProducts });
 

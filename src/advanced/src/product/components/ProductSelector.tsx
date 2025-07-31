@@ -2,7 +2,7 @@ import { useCart } from 'cart/context';
 import { Product } from 'types';
 import { commaizeNumber } from 'shared/utils';
 import { UI_TEXTS } from '@shared/constants/event';
-import { useProductSelection } from '../hooks';
+import { useProductSelection } from 'product/hooks';
 import { getProductStatus } from 'product/utils';
 
 export function ProductSelector() {

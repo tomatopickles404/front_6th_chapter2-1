@@ -1,21 +1,12 @@
 import { useState } from 'react';
 import { Product } from 'types';
-import { getFirstAvailableProduct } from '../utils';
+import { getFirstAvailableProduct } from 'product/utils';
 
 interface UseProductSelectionProps {
   products: Product[];
 }
 
-interface UseProductSelectionReturn {
-  selectedProductId: string;
-  setSelectedProductId: (productId: string) => void;
-  selectedProduct: Product | null;
-  hasValidSelection: boolean;
-}
-
-export function useProductSelection({
-  products,
-}: UseProductSelectionProps): UseProductSelectionReturn {
+export function useProductSelection({ products }: UseProductSelectionProps) {
   const firstAvailableProduct = getFirstAvailableProduct(products);
   const defaultProductId = firstAvailableProduct?.id || '';
 
