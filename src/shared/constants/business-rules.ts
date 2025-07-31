@@ -20,13 +20,13 @@ export const DISCOUNT_RATES = {
   tuesdaySpecial: {
     rate: 0.1,
   },
-};
+} as const;
 
 // ===== 재고 관리 =====
 export const STOCK_THRESHOLDS = {
   lowStock: 5,
   warningTotal: 50,
-};
+} as const;
 
 // ===== 포인트 적립 =====
 export const LOYALTY_POINTS = {
@@ -44,7 +44,7 @@ export const LOYALTY_POINTS = {
   },
 
   tuesdayMultiplier: 2,
-};
+} as const;
 
 // ===== 세일 이벤트 =====
 export const SALE_EVENTS = {
@@ -57,24 +57,24 @@ export const SALE_EVENTS = {
     discountRate: 0.05, // 5% 할인
     priceMultiplier: 0.95, // (100-5)/100
   },
-};
+} as const;
 
 // ===== 타이머 상수 =====
 export const TIMERS = {
   lightningDelayMax: 10000, // 번개세일 최대 지연시간 (10초)
   suggestionDelayMax: 20000, // 추천세일 최대 지연시간 (20초)
   saleInterval: 30000, // 세일 간격 (30초)
-};
+} as const;
 
 // ===== 요일 상수 =====
 export const DAYS_OF_WEEK = {
   tuesday: 2, // 0=일요일, 1=월요일, 2=화요일
-};
+} as const;
 
 // ===== 기타 상수 =====
 export const PARSING = {
   radix: 10, // parseInt 기본 진법
-};
+} as const;
 
 // ===== 상품 ID =====
 export const PRODUCT_IDS = {
@@ -83,4 +83,4 @@ export const PRODUCT_IDS = {
   monitorArm: 'p3',
   laptopPouch: 'p4',
   speaker: 'p5',
-};
+} as const;

@@ -6,27 +6,27 @@
 export const QUANTITY = {
   increment: 1,
   decrement: -1,
-};
+} as const;
 
 // 유효성 검증 결과 상수
 export const VALIDATION_RESULTS = {
   valid: 'valid',
   remove: 'remove',
   insufficient: 'insufficient',
-};
+} as const;
 
 // CSS 클래스명 상수
 export const CSS_CLASSES = {
   quantityChange: 'quantity-change',
   removeItem: 'remove-item',
   quantityNumber: 'quantity-number',
-};
+} as const;
 
 // 데이터 속성명 상수
 export const DATA_ATTRIBUTES = {
   productId: 'productId',
   change: 'change',
-};
+} as const;
 
 // 알림 메시지 상수
 export const ALERT_MESSAGES = {
@@ -37,7 +37,7 @@ export const ALERT_MESSAGES = {
   bulkPurchaseDiscount: '🎉 대량구매 할인 (30개 이상)',
   itemDiscount: '{productName} (10개↑)',
   outOfStock: '품절된 상품입니다.',
-};
+} as const;
 
 // 할인율 상수
 export const DISCOUNT_RATES = {
@@ -48,14 +48,14 @@ export const DISCOUNT_RATES = {
   monitorArm: 0.2,
   laptopCase: 0.05,
   speaker: 0.25,
-};
+} as const;
 
 // 수량 기준 상수
 export const QUANTITY_THRESHOLDS = {
   lowStock: 5,
   individualDiscount: 10,
   bulkDiscount: 30,
-};
+} as const;
 
 // 포인트 관련 상수
 export const POINTS = {
@@ -66,7 +66,7 @@ export const POINTS = {
   bulk20: 50,
   bulk30: 100,
   tuesdayMultiplier: 2,
-};
+} as const;
 
 // 할인 관련 상수
 export const DISCOUNT = {
@@ -75,22 +75,22 @@ export const DISCOUNT = {
   bulkDiscountRate: 0.25,
   tuesdayDiscountRate: 0.1,
   tuesdayDay: 2,
-};
+} as const;
 
 // 재고 관련 상수
 export const STOCK = {
   lowStockThreshold: 5,
-};
+} as const;
 
 // 날짜 관련 상수
 export const DATE = {
   tuesday: 2,
-};
+} as const;
 
 // 타이머 관련 상수
 export const TIMER = {
   suggestionDelay: 60000,
-};
+} as const;
 
 // UI 텍스트 상수
 export const UI_TEXTS = {
@@ -115,7 +115,7 @@ export const UI_TEXTS = {
     lowStock: '{productName}: 재고 부족 ({quantity}개 남음)',
     outOfStock: '{productName}: 품절',
   },
-};
+} as const;
 
 // CSS 스타일 상수
 export const CSS_STYLES = {
@@ -133,4 +133,4 @@ export const CSS_STYLES = {
     none: 'none',
   },
   hiddenClass: 'hidden',
-};
+} as const;

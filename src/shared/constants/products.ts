@@ -1,4 +1,4 @@
-import { PRODUCT_IDS } from './business-rules.js';
+import { PRODUCT_IDS } from './business-rules';
 
 export const PRODUCT_DATA = [
   {
@@ -46,7 +46,7 @@ export const PRODUCT_DATA = [
     onSale: false,
     suggestSale: false,
   },
-];
+] as const;
 
 // 상품별 할인율 매핑
 export const PRODUCT_DISCOUNT_MAP = {
@@ -55,4 +55,4 @@ export const PRODUCT_DISCOUNT_MAP = {
   [PRODUCT_IDS.monitorArm]: 0.2,
   [PRODUCT_IDS.laptopPouch]: 0.05,
   [PRODUCT_IDS.speaker]: 0.25,
-};
+} as const;
