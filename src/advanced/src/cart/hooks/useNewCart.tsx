@@ -1,5 +1,5 @@
 import { Product } from 'types';
-import { getCartTotals } from 'cart/utils/cartTotals';
+import { getCartTotals } from 'cart/utils';
 import { getStockStatus } from 'product/utils';
 import { useProductInventory } from 'product/hooks';
 import { useCartItems } from './useCartItems';

@@ -22,7 +22,7 @@ const isTuesday = (): boolean => {
  * 기본 포인트 계산
  * 최종 금액을 기준으로 기본 포인트를 계산
  */
-export const calculateBasePoints = (finalTotal: number): number => {
+export const getBasePoints = (finalTotal: number): number => {
   return Math.floor(finalTotal / LOYALTY_POINT_RATES.BASE_RATE);
 };
 
@@ -30,7 +30,7 @@ export const calculateBasePoints = (finalTotal: number): number => {
  * 화요일 보너스 계산
  * 화요일인 경우 기본 포인트에 2배 보너스 적용
  */
-export const calculateTuesdayBonus = (basePoints: number): number => {
+export const getTuesdayBonus = (basePoints: number): number => {
   if (!isTuesday() || basePoints <= 0) return 0;
   return basePoints * (LOYALTY_POINT_RATES.TUESDAY_MULTIPLIER - 1); // 추가 보너스만 반환
 };
@@ -39,7 +39,7 @@ export const calculateTuesdayBonus = (basePoints: number): number => {
  * 상품 세트 보너스 계산
  * 키보드+마우스 세트와 풀세트 보너스를 계산
  */
-export const calculateSetBonus = (cartItems: CartItem[]): number => {
+export const getSetBonus = (cartItems: CartItem[]): number => {
   const hasKeyboard = cartItems.some((item) => item.product.id === 'p1');
   const hasMouse = cartItems.some((item) => item.product.id === 'p2');
   const hasMonitorArm = cartItems.some((item) => item.product.id === 'p3');
@@ -63,7 +63,7 @@ export const calculateSetBonus = (cartItems: CartItem[]): number => {
  * 수량 보너스 계산
  * 총 구매 수량에 따른 보너스 포인트를 계산
  */
-export const calculateQuantityBonus = (cartItems: CartItem[]): number => {
+export const getQuantityBonus = (cartItems: CartItem[]): number => {
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   if (totalQuantity >= 30) {
@@ -87,10 +87,10 @@ export const getLoyaltyPoints = (
   cartItems: CartItem[],
   finalTotal: number
 ): number => {
-  const basePoints = calculateBasePoints(finalTotal);
-  const tuesdayBonus = calculateTuesdayBonus(basePoints);
-  const setBonus = calculateSetBonus(cartItems);
-  const quantityBonus = calculateQuantityBonus(cartItems);
+  const basePoints = getBasePoints(finalTotal);
+  const tuesdayBonus = getTuesdayBonus(basePoints);
+  const setBonus = getSetBonus(cartItems);
+  const quantityBonus = getQuantityBonus(cartItems);
 
   return basePoints + tuesdayBonus + setBonus + quantityBonus;
 };

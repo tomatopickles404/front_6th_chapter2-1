@@ -1,3 +1,3 @@
-export * from './cartCalculations';
+export * from './getItemDiscount';
 export * from './loyaltyPoints';
-export * from './cartTotals';
+export * from './getCartTotals';

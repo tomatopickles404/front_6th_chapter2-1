@@ -1,2 +1,2 @@
 export * from './createSafeContext';
-export * from './commaizeNumberWithIUnit';
+export * from './commaizeNumber';

@@ -1,5 +1,5 @@
 import { CartItem, ItemDiscountResult, CartTotalCalculation } from 'types';
-import { getItemDiscount, isTuesday } from './cartCalculations';
+import { getItemDiscount, isTuesday } from './getItemDiscount';
 import { getLoyaltyPoints } from './loyaltyPoints';
 
 const DISCOUNT_THRESHOLDS = {

@@ -1,5 +1,5 @@
 import { useCart } from 'cart/context';
-import { getItemDiscount, isTuesday } from 'cart/utils/cartCalculations';
+import { getItemDiscount, isTuesday } from 'cart/utils';
 
 export function useOrderSummary() {
   const { cartItems, cartTotal } = useCart();
