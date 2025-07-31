@@ -17,20 +17,17 @@ import {
   increaseProductQuantity,
   updateProductSaleStatus,
   canAddToCart,
-} from '../../../basic/state/cart.js';
+} from '../../../basic/state/cart';
 
 // Import business logic modules
 // @ts-ignore
 import { updateCartDisplay } from '../../../basic/modules/updateCartDisplay.js';
-import { updateProductOptions } from '../../../basic/modules/updateProductOptions.js';
-import { updatePricesInCart } from '../../../basic/modules/updatePricesInCart.js';
-import { updateStockDisplay } from '../../../basic/modules/updateStockDisplay.js';
 
 // Import utilities
 import {
   generateStockStatus,
   isTuesday,
-} from '../../../shared/utils/cart-helpers.js';
+} from '../../../shared/utils/cart-helpers';
 
 // Cart actions
 type CartAction =
