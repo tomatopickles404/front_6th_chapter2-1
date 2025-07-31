@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useCart } from 'hooks';
-import { Product, CartState } from 'types';
+import { Product } from 'types';
 import { SALE_EVENTS, TIMERS } from 'shared/constants/business-rules';
 
 // 세일 관련 상수
@@ -16,58 +16,18 @@ const findLuckyItem = (productInventory: Product[]): Product | null => {
   return luckyItem.q > 0 && !luckyItem.onSale ? luckyItem : null;
 };
 
-const findSuggestedProduct = (cartState: CartState): Product | null => {
-  const productInventory = cartState.productInventory;
-  const lastSelectedProduct = cartState.lastSelectedProduct;
-
+const findSuggestedProduct = (
+  products: Product[],
+  lastSelectedProductId?: string
+): Product | null => {
   return (
-    productInventory.find(
+    products.find(
       (product: Product) =>
-        product.id !== lastSelectedProduct &&
+        product.id !== lastSelectedProductId &&
         product.q > 0 &&
         !product.suggestSale
     ) || null
   );
-};
-
-const createLightningSaleAction = (product: Product) => {
-  return {
-    type: 'UPDATE_SALE_STATUS' as const,
-    payload: {
-      productId: product.id,
-      saleInfo: {
-        val: Math.round(
-          product.originalVal * SALE_EVENTS.lightning.priceMultiplier
-        ),
-        onSale: true,
-      },
-    },
-  };
-};
-
-const createSuggestionSaleAction = (product: Product) => {
-  return {
-    type: 'UPDATE_SALE_STATUS' as const,
-    payload: {
-      productId: product.id,
-      saleInfo: {
-        val: Math.round(product.val * SALE_EVENTS.suggestion.priceMultiplier),
-        suggestSale: true,
-      },
-    },
-  };
-};
-
-const createSaleEndAction = (productId: string) => {
-  return {
-    type: 'UPDATE_SALE_STATUS' as const,
-    payload: {
-      productId,
-      saleInfo: {
-        onSale: false,
-      },
-    },
-  };
 };
 
 /**
@@ -75,27 +35,35 @@ const createSaleEndAction = (productId: string) => {
  * 번개세일과 추천세일을 관리
  */
 export function useSaleEffects() {
-  const { state, dispatch } = useCart();
+  const { products, updateSaleStatus } = useCart();
 
   // 번개세일 로직을 useCallback으로 최적화
   const handleLightningSale = useCallback(() => {
-    const luckyItem = findLuckyItem(state.productInventory);
+    const luckyItem = findLuckyItem(products);
 
     if (luckyItem) {
-      const action = createLightningSaleAction(luckyItem);
-      dispatch(action);
+      updateSaleStatus(luckyItem.id, {
+        val: Math.round(
+          luckyItem.originalVal * SALE_EVENTS.lightning.priceMultiplier
+        ),
+        onSale: true,
+      });
     }
-  }, [state.productInventory, dispatch]);
+  }, [products, updateSaleStatus]);
 
   // 추천세일 로직을 useCallback으로 최적화
   const handleSuggestionSale = useCallback(() => {
-    const suggestedProduct = findSuggestedProduct(state);
+    const suggestedProduct = findSuggestedProduct(products);
 
     if (suggestedProduct) {
-      const action = createSuggestionSaleAction(suggestedProduct);
-      dispatch(action);
+      updateSaleStatus(suggestedProduct.id, {
+        val: Math.round(
+          suggestedProduct.val * SALE_EVENTS.suggestion.priceMultiplier
+        ),
+        suggestSale: true,
+      });
     }
-  }, [state, dispatch]);
+  }, [products, updateSaleStatus]);
 
   useEffect(() => {
     let lightningInterval: ReturnType<typeof setInterval> | null = null;
@@ -130,13 +98,14 @@ export function useSaleEffects() {
  */
 export function useLightningSaleTimer(productId: string) {
   const [isOnSale, setIsOnSale] = useState(false);
-  const { dispatch } = useCart();
+  const { updateSaleStatus } = useCart();
 
   const endSale = useCallback(() => {
-    const action = createSaleEndAction(productId);
-    dispatch(action);
+    updateSaleStatus(productId, {
+      onSale: false,
+    });
     setIsOnSale(false);
-  }, [productId, dispatch]);
+  }, [productId, updateSaleStatus]);
 
   useEffect(() => {
     if (!isOnSale) return;
