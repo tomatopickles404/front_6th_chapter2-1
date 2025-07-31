@@ -1,5 +1,5 @@
-import { PRODUCT_DATA } from '../shared/constants/product-data.js';
-import { updateProductOptions, updateCartDisplay } from './modules/index.js';
+import { PRODUCT_DATA } from '../shared/constants/products';
+import { updateProductOptions, updateCartDisplay } from './modules/index';
 import {
   createInitialCartState,
   initializeCart,
