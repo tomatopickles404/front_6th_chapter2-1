@@ -1,8 +1,10 @@
 import { useCart } from 'hooks';
+import { UI_TEXTS } from 'shared/constants/event';
 
 export function OrderSummary() {
-  const { cartTotal, loyaltyPoints, discountInfo } = useCart();
+  const { cartTotal, discountInfo } = useCart();
   const isTuesday = new Date().getDay() === 2;
+  const { loyaltyPoints, loyaltyPointsZero } = UI_TEXTS;
 
   return (
     <div className="bg-black text-white p-8 flex flex-col">
@@ -12,7 +14,7 @@ export function OrderSummary() {
       <div className="flex-1 flex flex-col">
         <div id="summary-details" className="space-y-3"></div>
         <div className="mt-auto">
-          <div id="discount-info" className="mb-4">
+          <div id="discount-info" className="mb-4 text-white/50">
             {discountInfo}
           </div>
           <div id="cart-total" className="pt-5 border-t border-white/10">
@@ -25,14 +27,17 @@ export function OrderSummary() {
             <div
               id="loyalty-points"
               className="text-xs text-blue-400 mt-2 text-right"
-              style={{ display: cartTotal > 0 ? 'block' : 'none' }}
             >
-              적립 포인트: {loyaltyPoints}p
+              {Number(loyaltyPoints) > 0
+                ? loyaltyPoints.replace('{points}', loyaltyPoints)
+                : loyaltyPointsZero.replace('{points}', '0')}
             </div>
           </div>
           <div
             id="tuesday-special"
-            className={`mt-4 p-3 bg-white/10 rounded-lg ${isTuesday ? '' : 'hidden'}`}
+            className={`mt-4 p-3 bg-white/10 rounded-lg ${
+              isTuesday ? '' : 'hidden'
+            }`}
           >
             <div className="flex items-center gap-2">
               <span className="text-2xs">🎉</span>

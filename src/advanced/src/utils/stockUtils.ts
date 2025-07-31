@@ -1,4 +1,5 @@
 import { Product } from 'types';
+import { UI_TEXTS } from 'shared/constants/event';
 
 const STOCK_THRESHOLDS = {
   OUT_OF_STOCK: 0,
@@ -32,11 +33,16 @@ export const canAddToCart = (
 
 export const getStockStatusMessage = (product: Product): string | null => {
   if (isOutOfStock(product)) {
-    return `${product.name}: 품절`;
+    return UI_TEXTS.stockMessages.outOfStock.replace(
+      '{productName}',
+      product.name
+    );
   }
 
   if (isLowStock(product)) {
-    return `${product.name}: 재고 부족 (${product.q}개 남음)`;
+    return UI_TEXTS.stockMessages.lowStock
+      .replace('{productName}', product.name)
+      .replace('{quantity}', product.q.toString());
   }
 
   return null;

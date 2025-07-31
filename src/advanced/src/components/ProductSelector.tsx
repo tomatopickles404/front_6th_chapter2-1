@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { useCart } from 'hooks';
 import { Product } from 'types';
 import { commaizeNumber } from 'utils/commaizeNumberWithIUnit';
+import { UI_TEXTS } from 'shared/constants/event';
 
 export function ProductSelector() {
-  const { state, stockStatus, addToCart } = useCart();
+  const { products, stockStatus, addToCart } = useCart();
   const [selectedProductId, setSelectedProductId] = useState('');
-  const products = state.productInventory;
 
   //FIXME: 개선
   useEffect(() => {
@@ -73,7 +73,10 @@ function ProductOption({ product }: ProductOptionProps) {
   // 상품 상태별 표시 정보를 한 곳에 정의
   const displayInfo = (() => {
     if (isOutOfStock) {
-      return { suffix: ' (품절)', disabled: true };
+      return {
+        suffix: ` (${UI_TEXTS.stockMessages.outOfStock.split(':')[1].trim()})`,
+        disabled: true,
+      };
     }
     if (hasDiscount) {
       return { suffix: ' (할인가)', disabled: false };
