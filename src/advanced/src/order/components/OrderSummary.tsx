@@ -10,7 +10,12 @@ import {
 } from './index';
 
 export function OrderSummary() {
-  const { cartItems, cartTotal, discountInfo } = useCart();
+  const {
+    cartItems,
+    cartTotal,
+    discountInfo,
+    loyaltyPoints: calculatedPoints,
+  } = useCart();
   const {
     subtotal,
     isCurrentlyTuesday,
@@ -20,7 +25,13 @@ export function OrderSummary() {
     showTuesdayDiscount,
   } = useOrderSummary();
 
-  const { loyaltyPoints, loyaltyPointsZero } = UI_TEXTS;
+  const { loyaltyPoints: loyaltyPointsTemplate, loyaltyPointsZero } = UI_TEXTS;
+
+  // 실제 계산된 포인트로 템플릿 치환
+  const loyaltyPoints =
+    calculatedPoints > 0
+      ? loyaltyPointsTemplate.replace('{points}', calculatedPoints.toString())
+      : loyaltyPointsZero.replace('{points}', '0');
 
   return (
     <div className="bg-black text-white p-8 flex flex-col">
