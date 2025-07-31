@@ -21,6 +21,44 @@ export interface CartState {
   lastSelectedProduct: string | null;
 }
 
+// Discount related types
+export interface DiscountRates {
+  [productId: string]: number;
+}
+
+export interface ItemDiscountResult {
+  itemTotal: number;
+  itemDiscount: number;
+  quantity: number;
+  product: Product;
+}
+
+export interface CartTotalCalculation {
+  cartTotal: number;
+  loyaltyPoints: number;
+  discountInfo: string;
+}
+
+export interface SaleInfo {
+  val?: number;
+  onSale?: boolean;
+  suggestSale?: boolean;
+}
+
+// Cart Actions
+export type CartAction =
+  | { type: 'INITIALIZE'; payload: Product[] }
+  | { type: 'ADD_TO_CART'; payload: string }
+  | { type: 'REMOVE_FROM_CART'; payload: string }
+  | { type: 'UPDATE_QUANTITY'; payload: { productId: string; change: number } }
+  | { type: 'UPDATE_TOTALS'; payload: { total: number; count: number } }
+  | { type: 'SET_LAST_SELECTED'; payload: string }
+  | {
+      type: 'UPDATE_SALE_STATUS';
+      payload: { productId: string; saleInfo: SaleInfo };
+    }
+  | { type: 'REPLACE_STATE'; payload: CartState };
+
 // Component Props interfaces
 export interface HeaderProps {
   itemCount?: number;
@@ -29,6 +67,12 @@ export interface HeaderProps {
 export interface CartItemProps {
   product: Product;
   quantity?: number;
+}
+
+export interface CartItemPriceProps {
+  product: Product;
+  quantity: number;
+  onRemove: () => void;
 }
 
 export interface ProductSelectorProps {
