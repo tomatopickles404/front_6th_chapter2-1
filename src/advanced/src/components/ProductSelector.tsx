@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from 'hooks';
+import { Product } from 'types';
+import { commaizeNumber } from 'utils/commaizeNumberWithIUnit';
 
 export function ProductSelector() {
   const { state, stockStatus, addToCart } = useCart();
@@ -27,30 +29,9 @@ export function ProductSelector() {
         value={selectedProductId}
         onChange={(e) => setSelectedProductId(e.target.value)}
       >
-        {products.map((product) => {
-          let priceDisplay = '';
-
-          if (product.q <= 0) {
-            // 품절 상품 표시
-            priceDisplay = `${product.name} - ₩${product.val.toLocaleString()} (품절)`;
-          } else if (product.onSale || product.suggestSale) {
-            // 할인 상품 표시
-            priceDisplay = `${product.name} - ₩${product.val.toLocaleString()} (할인가)`;
-          } else {
-            // 일반 상품 표시
-            priceDisplay = `${product.name} - ₩${product.val.toLocaleString()}`;
-          }
-
-          return (
-            <option
-              key={product.id}
-              value={product.id}
-              disabled={product.q <= 0}
-            >
-              {priceDisplay}
-            </option>
-          );
-        })}
+        {products.map((product) => (
+          <ProductOption key={product.id} product={product} />
+        ))}
       </select>
       <button
         id="add-to-cart"
@@ -66,5 +47,42 @@ export function ProductSelector() {
         {stockStatus}
       </div>
     </div>
+  );
+}
+
+// 상품 상태 판단
+const getProductStatus = (product: Product) => {
+  const isOutOfStock = product.q <= 0;
+  const hasDiscount = product.onSale || product.suggestSale;
+
+  return { isOutOfStock, hasDiscount };
+};
+
+// 상품 옵션 컴포넌트
+interface ProductOptionProps {
+  product: Product;
+}
+
+function ProductOption({ product }: ProductOptionProps) {
+  const { val, id, name } = product;
+  const { isOutOfStock, hasDiscount } = getProductStatus(product);
+  const formattedPrice = commaizeNumber(val);
+
+  // 상품 상태별 표시 정보를 한 곳에 정의
+  const displayInfo = (() => {
+    if (isOutOfStock) {
+      return { suffix: ' (품절)', disabled: true };
+    }
+    if (hasDiscount) {
+      return { suffix: ' (할인가)', disabled: false };
+    }
+    return { suffix: '', disabled: false };
+  })();
+
+  return (
+    <option value={id} disabled={displayInfo.disabled}>
+      {name} - ₩{formattedPrice}
+      {displayInfo.suffix}
+    </option>
   );
 }
