@@ -1,8 +1,7 @@
-import React from 'react';
-import { useCart } from '../hooks/useCart';
+import { useCart } from 'hooks';
 import { CartItem } from './CartItem';
 
-export const CartDisplay: React.FC = () => {
+export function CartDisplay() {
   const { cartItems } = useCart();
 
   return (
@@ -12,4 +11,4 @@ export const CartDisplay: React.FC = () => {
       ))}
     </div>
   );
-};
+}
