@@ -26,7 +26,6 @@ function AppContent() {
       className="max-w-screen-xl h-screen max-h-800 mx-auto p-8 flex flex-col"
     >
       <Header />
-
       <MainContent />
     </div>
   );
@@ -36,15 +35,19 @@ function MainContent() {
   return (
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 flex-1 overflow-hidden">
-        <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
-          <ProductSelector />
-          <CartDisplay />
-        </div>
-
+        <SelectSection />
         <OrderSummary />
-
         <HelpButton />
       </div>
+    </div>
+  );
+}
+
+function SelectSection() {
+  return (
+    <div className="bg-white border border-gray-200 p-8 overflow-y-auto">
+      <ProductSelector />
+      <CartDisplay />
     </div>
   );
 }
